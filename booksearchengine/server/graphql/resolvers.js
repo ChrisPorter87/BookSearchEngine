@@ -5,10 +5,10 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id }).select(
-          "-__v -password"
-        );
-
+        const userData = await User.findOne({ _id: context.user._id })
+          .select("-__v -password")
+          .populate("savedBooks");
+        console.log(context.user);
         return userData;
       }
 
@@ -40,7 +40,7 @@ const resolvers = {
     },
 
     saveBook: async (_parent, { input }) => {
-      if (!context.user) {
+      if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $addToSet: { savedBooks: input } },
@@ -51,7 +51,7 @@ const resolvers = {
       throw new AuthenticationError("Not logged in");
     },
     removeBook: async (_parent, { bookId }, context) => {
-      if (!context.user) {
+      if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $pull: { savedBooks: { bookId } } },

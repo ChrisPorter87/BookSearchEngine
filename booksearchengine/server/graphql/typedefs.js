@@ -29,7 +29,7 @@ const typeDefs = gql`
     authors: [String]
     description: String
     image: String
-    #link: String
+    link: String
   }
   type Mutation {
     login(email: String!, password: String!): Auth

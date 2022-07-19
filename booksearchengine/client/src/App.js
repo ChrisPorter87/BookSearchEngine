@@ -13,7 +13,7 @@ import {
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext(async (req, { headers }) => {
   const token = localStorage.getItem("token");
   return {
     headers: {
